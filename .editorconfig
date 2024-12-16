@@ -1,0 +1,9 @@
+
+[*]
+indent_style = space
+end_of_line = lf
+charset = utf-8
+max_line_length = 115
+
+[*.cs]
+indent_size = 4

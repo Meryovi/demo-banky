@@ -1,0 +1,28 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "label": "dotnet: run",
+      "group": "build",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "run",
+        "--project",
+        "${workspaceFolder}/src/Banky.Server/"
+      ],
+      "problemMatcher": "$msCompile",
+    },
+    {
+      "label": "dotnet: test",
+      "group": "test",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "test",
+        "${workspaceFolder}/Banky.sln"
+      ],
+      "problemMatcher": "$msCompile",
+    }
+  ]
+}
