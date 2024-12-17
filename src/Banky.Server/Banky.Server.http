@@ -1,0 +1,54 @@
+@Banky_Host = http://localhost:5177
+@Banky_ClientId = 79c03439-4b69-4b42-a6a5-ea17972d4ad4
+@Banky_AccountId = 0193cfb7-fc0e-7809-ae04-191ada373ce0
+
+### Client API calls
+
+GET {{Banky_Host}}/api/v1/clients
+Accept: application/json
+
+###
+
+GET {{Banky_Host}}/api/v1/clients/{{Banky_ClientId}}
+Accept: application/json
+
+###
+
+PUT {{Banky_Host}}/api/v1/clients/{{Banky_ClientId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "John",
+  "lastName": "Doe",
+  "email": ""
+}
+
+### Account API calls
+
+GET {{Banky_Host}}/api/v1/accounts/{{Banky_ClientId}}
+Accept: application/json
+
+###
+
+POST {{Banky_Host}}/api/v1/accounts/{{Banky_ClientId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "accountName": "",
+  "type": 200,
+  "initialBalance": 0
+}
+
+###
+
+POST {{Banky_Host}}/api/v1/accounts/{{Banky_ClientId}}/{{Banky_AccountId}}/transfer
+Content-Type: application/json
+Accept: application/json
+
+{
+  "sourceAccountId": "{{Banky_AccountId}}",
+  "destinationAccountId": "",
+  "amount": 0
+}
