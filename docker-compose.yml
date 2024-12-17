@@ -1,0 +1,19 @@
+services:
+  app:
+    build: .
+    ports:
+      - "5177:8080"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__Accounts=Host=db;Port=5432;Database=banky;Username=postgres;Password=p4ssw0rd;Timeout=500;
+      - ConnectionStrings__Clients=Host=db;Port=5432;Database=banky;Username=postgres;Password=p4ssw0rd;Timeout=500;
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: p4ssw0rd
+      POSTGRES_DB: banky
+    ports:
+      - "5432:5432"
