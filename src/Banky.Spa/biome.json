@@ -1,0 +1,33 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": []
+  },
+  "formatter": {
+    "lineWidth": 120,
+    "enabled": true,
+    "indentStyle": "space",
+    "ignore": ["src/Banky.Spa/node_modules/**/*", "src/Banky.Spa/dist/**/*", "src/Banky.Spa/obj/**/*"]
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "bracketSameLine": true
+    }
+  }
+}
