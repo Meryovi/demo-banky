@@ -1,4 +1,4 @@
-import { useActionState } from "react";
+import { useActionState, useTransition } from "react";
 import { z } from "zod";
 import { LinkButton, PrimaryButton } from "../../../components/Buttons";
 import ModalContainer from "../../../components/ModalContainer";
@@ -23,6 +23,7 @@ export default function TransferBetweenAccountsModal(props: {
   fromAccountId: string;
   onClose: () => void;
 }) {
+  const [_, startTransition] = useTransition();
   const { accounts, isLoading } = useAccountsQuery(props.clientId);
   const { accountTransfer } = useAccountsTransferMutation(props.clientId);
 
@@ -57,7 +58,7 @@ export default function TransferBetweenAccountsModal(props: {
         onSubmit={(e) => {
           // Not using form action to prevent the "form reset" behavior...
           e.preventDefault();
-          transferAction(new FormData(e.currentTarget));
+          startTransition(() => transferAction(new FormData(e.currentTarget)));
         }}>
         {state.errors.map((error) => (
           <div key={error} className="text-red-700 text-sm mt-2">

@@ -1,33 +1,37 @@
 {
-  "name": "react-ts",
+  "name": "banky.spa",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "test": "vitest run --environment jsdom",
     "lint": "npx @biomejs/biome lint --fix",
     "format": "npx @biomejs/biome format --fix",
     "preview": "vite preview",
     "scaffold": "npx openapi-typescript http://localhost:5177/openapi/v1.json -o ./src/schema.d.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.62.8",
     "openapi-fetch": "^0.13.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-query": "^3.39.3",
-    "zod": "^3.23.8"
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@tailwindcss/vite": "^4.0.0-beta.5",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.1",
+    "@tailwindcss/vite": "^4.0.0-beta.8",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
-    "globals": "^15.13.0",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
     "openapi-typescript": "^7.4.4",
-    "tailwindcss": "^4.0.0-beta.5",
+    "tailwindcss": "^4.0.0-beta.8",
     "typescript": "^5.7.2",
-    "vite": "^6.0.3"
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
   }
 }

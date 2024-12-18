@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { client, ValidationError } from "../httpClient";
 import { components } from "../../schema";
 
@@ -6,7 +6,6 @@ export const useAccountsQuery = (clientId: string) => {
   const { data, isLoading, error } = useQuery({
     queryKey: ["accounts", clientId],
     refetchOnWindowFocus: false,
-    keepPreviousData: true,
     queryFn: () => fetchAccounts(clientId),
   });
 
@@ -16,7 +15,7 @@ export const useAccountsQuery = (clientId: string) => {
 export function useOpenAccountMutation(clientId: string) {
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isLoading, error } = useMutation({
+  const { mutateAsync, isPending, error } = useMutation({
     mutationFn: (data: components["schemas"]["Request"]) => createAccount(clientId, data),
     onSuccess: (data) => {
       queryClient.setQueryData(["accounts", clientId], (old: unknown) =>
@@ -25,27 +24,27 @@ export function useOpenAccountMutation(clientId: string) {
     },
   });
 
-  return { openAccount: mutateAsync, isLoading, error };
+  return { openAccount: mutateAsync, isPending, error };
 }
 
 export function useAccountsTransferMutation(clientId: string) {
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isLoading, error } = useMutation({
-    mutationFn: (data: components["schemas"]["Request2"]) =>
-      transferBetweenAccounts(clientId, data.fromAccountId ?? "", data),
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationFn: (data: components["schemas"]["Request2"] & { fromAccountId: string }) =>
+      transferBetweenAccounts(clientId, data.fromAccountId, data),
     onSuccess: () => {
-      queryClient.removeQueries(["accounts", clientId]);
+      queryClient.invalidateQueries({ queryKey: ["accounts", clientId] });
     },
   });
 
-  return { accountTransfer: mutateAsync, isLoading, error };
+  return { accountTransfer: mutateAsync, isPending, error };
 }
 
 export function useCloseAccountMutation(clientId: string) {
   const queryClient = useQueryClient();
 
-  const { mutateAsync, isLoading, error } = useMutation({
+  const { mutateAsync, isPending, error } = useMutation({
     mutationFn: (accountId: string) => closeAccount(clientId, accountId),
     onMutate: (accountId) => {
       // Optimistically update the local cache.
@@ -70,7 +69,7 @@ export function useCloseAccountMutation(clientId: string) {
     },
   });
 
-  return { closeAccount: mutateAsync, isLoading, error };
+  return { closeAccount: mutateAsync, isPending, error };
 }
 
 const fetchAccounts = async (clientId: string) =>
@@ -99,7 +98,7 @@ const transferBetweenAccounts = async (clientId: string, accountId: string, data
     })
     .then((response) => {
       if (response.response.status === 200) {
-        return response.data!.account;
+        return;
       }
       throw new ValidationError(response.error!);
     });

@@ -202,9 +202,7 @@ export interface paths {
     /** @description Update an account */
     put: {
       parameters: {
-        query: {
-          name: string;
-        };
+        query?: never;
         header?: never;
         path: {
           clientId: string;
@@ -212,7 +210,11 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody?: never;
+      requestBody: {
+        content: {
+          "application/json": components["schemas"]["Request3"];
+        };
+      };
       responses: {
         /** @description OK */
         200: {
@@ -340,7 +342,7 @@ export interface paths {
       };
       requestBody: {
         content: {
-          "application/json": components["schemas"]["Request3"];
+          "application/json": components["schemas"]["Request4"];
         };
       };
       responses: {
@@ -426,11 +428,13 @@ export interface components {
       toAccountId: string;
       /** Format: double */
       amount: number;
-      /** Format: uuid */
-      fromAccountId?: string;
+    };
+    /** UpdateAccountRequest */
+    Request3: {
+      name: string;
     };
     /** UpdateClientRequest */
-    Request3: {
+    Request4: {
       name: string;
       lastName: string | null;
       email: string;

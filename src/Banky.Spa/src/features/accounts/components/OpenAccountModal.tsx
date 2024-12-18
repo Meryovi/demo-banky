@@ -49,7 +49,7 @@ export default function OpenAccountModal(props: { clientId: string; onClose: () 
           </div>
         ))}
         <div>
-          <label htmlFor="name" className="block mt-4 mb-2">
+          <label htmlFor="accountName" className="block mt-4 mb-2">
             Account name
           </label>
           <input
