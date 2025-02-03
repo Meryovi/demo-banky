@@ -2,7 +2,8 @@ name: Banky Build Pipeline
 
 on:
   push:
-    branches: *
+    branches:
+      - "**"
 
 jobs:
   build:
