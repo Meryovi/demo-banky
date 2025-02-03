@@ -1,0 +1,45 @@
+name: Banky Build Pipeline
+
+on:
+  push:
+    workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "9.0.x"
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Restore dependencies
+        run: dotnet restore --locked-mode ./Banky.sln
+
+      - name: Build
+        run: dotnet publish --no-restore --os linux --sc false -o ./app ./Banky.sln
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: smartpixel.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t smartpixel.azurecr.io/banky:latest .
+          docker push smartpixel.azurecr.io/banky:latest
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: test-app
+          images: smartpixel.azurecr.io/banky:latest
