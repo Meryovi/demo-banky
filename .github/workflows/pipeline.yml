@@ -2,8 +2,7 @@ name: Banky Build Pipeline
 
 on:
   push:
-    branches:
-      - "**"
+    branches: ["**"]
 
 jobs:
   build:
@@ -16,13 +15,16 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v4
         with:
+          dotnet-version: "9.0.x"
           global-json-file: global.json
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
 
       - name: Restore dependencies
-        run: dotnet restore ./Banky.sln
+        run: dotnet restore --locked-mode ./Banky.sln
 
       - name: Build
-        run: dotnet build --no-restore ./Banky.sln
+        run: dotnet build --no-restore --os linux ./Banky.sln
 
       - name: Test server
         run: dotnet test --no-build ./Banky.sln
