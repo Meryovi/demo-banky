@@ -22,7 +22,7 @@ jobs:
         run: dotnet restore --locked-mode ./Banky.sln
 
       - name: Build
-        run: dotnet build --no-restore --os linux ./Banky.sln
+        run: dotnet build --no-restore ./Banky.sln
 
       - name: Test server
         run: dotnet test --no-build ./Banky.sln
