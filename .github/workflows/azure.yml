@@ -35,9 +35,9 @@ jobs:
           docker push ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
 
       - name: Deploy to Azure Container Apps
-          uses: azure/container-apps-deploy-action@v1
-          with:
-            azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-            resourceGroup: "Enterprise VS"
-            containerAppName: test-app
-            imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          resourceGroup: "Enterprise VS"
+          containerAppName: test-app
+          imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
