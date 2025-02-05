@@ -3,9 +3,6 @@ name: Banky Release Pipeline
 on:
   workflow_dispatch:
 
-env:
-  RESOURCE_GROUP: "Enterprise VS"
-
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -41,6 +38,6 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          resourceGroup: ${{ env.RESOURCE_GROUP }}
+          resourceGroup: VSE-Development
           containerAppName: test-app
           imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
