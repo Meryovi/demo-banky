@@ -1,6 +1,8 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     ports:
       - "5177:8080"
     depends_on:
@@ -8,6 +10,7 @@ services:
     environment:
       - ConnectionStrings__Accounts=Host=db;Port=5432;Database=banky;Username=postgres;Password=p4ssw0rd;Timeout=500;
       - ConnectionStrings__Clients=Host=db;Port=5432;Database=banky;Username=postgres;Password=p4ssw0rd;Timeout=500;
+      - ASPNETCORE_ENVIRONMENT=Development
 
   db:
     image: postgres:latest

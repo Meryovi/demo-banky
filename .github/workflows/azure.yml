@@ -1,0 +1,44 @@
+name: Banky Release Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore dependencies
+        run: dotnet restore --locked-mode ./src/Banky.Server/Banky.Server.csproj
+
+      - name: Build
+        run: dotnet publish --no-restore --sc false -o ./app ./src/Banky.Server/Banky.Server.csproj
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }} .
+          docker push ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
+
+      - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          resourceGroup: ${{ secrets.AZURE_RES_GROUP }}
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
+          imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
+          targetPort: 80

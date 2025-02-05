@@ -1,0 +1,33 @@
+name: Banky Build Pipeline
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restore dependencies
+        run: dotnet restore --locked-mode ./Banky.sln
+
+      - name: Build
+        run: dotnet build --no-restore ./Banky.sln
+
+      - name: Test server
+        run: dotnet test --no-build ./Banky.sln
+
+      - name: Test client
+        run: |
+          cd ./src/Banky.Spa
+          npm install
+          npm test
