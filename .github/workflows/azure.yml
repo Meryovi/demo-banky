@@ -39,5 +39,5 @@ jobs:
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
           resourceGroup: VSE-Development
-          containerAppName: test-app
+          containerAppName: test-container-app
           imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
