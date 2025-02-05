@@ -25,17 +25,19 @@ jobs:
       - name: Login to Azure Container Registry
         uses: docker/login-action@v3
         with:
-          registry: smartpixel.azurecr.io
+          registry: ${{ secrets.ACR_REGISTRY }}
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t smartpixel.azurecr.io/banky:latest .
-          docker push smartpixel.azurecr.io/banky:latest
+          docker build -t ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }} .
+          docker push ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
 
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
+     - name: Deploy to Azure Container Apps
+        uses: azure/container-apps-deploy-action@v1
         with:
-          app-name: test-app
-          images: smartpixel.azurecr.io/banky:latest
+          azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
+          resourceGroup: "Enterprise VS"
+          containerAppName: test-app
+          imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
