@@ -38,6 +38,7 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          resourceGroup: VSE-Development
-          containerAppName: test-container-app
+          resourceGroup: ${{ secrets.AZURE_RES_GROUP }}
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
           imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
+          targetPort: 80
