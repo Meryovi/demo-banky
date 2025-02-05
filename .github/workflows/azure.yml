@@ -38,6 +38,6 @@ jobs:
         uses: azure/container-apps-deploy-action@v1
         with:
           azureCredentials: ${{ secrets.AZURE_CREDENTIALS }}
-          resourceGroup: "Enterprise VS"
+          resourceGroup: "Enterprise\ VS"
           containerAppName: test-app
           imageToDeploy: ${{ secrets.ACR_REGISTRY }}/banky:${{ github.sha }}
