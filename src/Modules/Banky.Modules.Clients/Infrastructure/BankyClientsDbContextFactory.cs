@@ -7,7 +7,7 @@ internal class BankyClientsDbContextFactory : IDesignTimeDbContextFactory<BankyC
     public BankyClientsDbContext CreateDbContext(string[] args)
     {
         var options = new DbContextOptionsBuilder<BankyClientsDbContext>()
-            .UseNpgsql("Host=localhost;Database=banky;Username=postgres;Password=postgres")
+            .UseNpgsql("Host=localhost;Database=banky;Username=postgres;Password=p4ssw0rd")
             .Options;
 
         return new BankyClientsDbContext(options);

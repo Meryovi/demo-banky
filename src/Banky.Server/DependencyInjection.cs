@@ -15,7 +15,8 @@ public static class DependencyInjection
 
     public static void MapBankyApiRoutes(this WebApplication app)
     {
-        app.UseCors(config => config.AllowAnyOrigin().AllowAnyHeader());
+        if (app.Environment.IsDevelopment())
+            app.UseCors(config => config.AllowAnyOrigin().AllowAnyHeader());
 
         var apiGroup = app.MapGroup("/api/v1");
         apiGroup.WithOpenApi();
