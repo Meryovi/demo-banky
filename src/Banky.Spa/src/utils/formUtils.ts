@@ -5,7 +5,7 @@ export function parseFormWithSchema<T>(formData: FormData, schema: z.Schema<T>):
   const parseResult = schema.safeParse(dataObject);
 
   if (!parseResult.success) {
-    const errors = parseResult.error.errors.map((error) => error.message);
+    const errors = parseResult.error.issues.map((error) => error.message);
     return { data: dataObject, errors };
   }
 
