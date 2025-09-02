@@ -85,4 +85,23 @@ public class CloseAccount_Tests
         badRequest.Value.Should().NotBeEmpty();
         badRequest.Value.Should().Contain(Errors.CannotCloseAccountWithNonZeroBalance(account.Balance).Message);
     }
+
+    [Fact]
+    public async Task CloseAccount_ShouldUpdate_Repository()
+    {
+        // Arrange
+        _timeProvider.GetUtcNow().Returns(new DateTimeOffset(2024, 9, 1, 0, 0, 0, TimeSpan.Zero));
+        var account = Account.Create(Guid.NewGuid(), AccountType.Savings, "X", _timeProvider).Value;
+
+        _repository.GetById(account.Id, Arg.Any<CancellationToken>()).Returns(account);
+
+        // Act
+        await CloseAccount.Handler(account.ClientId, account.Id, _repository, _timeProvider, default);
+
+        // Assert
+        await _repository.Received(1).Update(
+            Arg.Any<CancellationToken>(),
+            Arg.Is<IEnumerable<Account>>(items => items.Count() == 1 && items.First().Id == account.Id)
+        );
+    }
 }

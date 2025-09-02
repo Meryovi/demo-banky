@@ -61,4 +61,19 @@ public class OpenAccount_Tests
         resultErrors.Should().ContainMatch("*'Account Name' must be at least*");
         resultErrors.Should().ContainMatch("*'Initial Balance' must be greater than '0'*");
     }
+
+    [Fact]
+    public async Task OpenAccount_ShouldInsert_IntoRepository()
+    {
+        // Arrange
+        _timeProvider.GetUtcNow().Returns(new DateTimeOffset(2024, 9, 1, 0, 0, 0, TimeSpan.Zero));
+        var clientId = Guid.NewGuid();
+        var request = new OpenAccount.Request("Account A", AccountType.Savings, 100);
+
+        // Act
+        await OpenAccount.Handler(clientId, request, _accountsRepository, _timeProvider, default);
+
+        // Assert
+        await _accountsRepository.Received(1).Insert(Arg.Any<Account>(), Arg.Any<CancellationToken>());
+    }
 }

@@ -88,4 +88,31 @@ public class TransferBetweenAccounts_Tests
         resultErrors.Should().ContainMatch("*'Amount' must be greater than '0'*");
         resultErrors.Should().ContainMatch("*Cannot transfer to the same account*");
     }
+
+    [Fact]
+    public async Task TransferBetweenAccounts_ShouldUpdate_BothAccounts()
+    {
+        // Arrange
+        _timeProvider.GetUtcNow().Returns(new DateTimeOffset(2024, 9, 1, 0, 0, 0, TimeSpan.Zero));
+
+        var clientId = Guid.NewGuid();
+        var from = Account.Create(clientId, AccountType.Savings, "From", _timeProvider).Value;
+        var to = Account.Create(clientId, AccountType.Savings, "To", _timeProvider).Value;
+        from.Deposit(200);
+        to.Deposit(50);
+
+        _accountRepository.GetById(from.Id, Arg.Any<CancellationToken>()).Returns(from);
+        _accountRepository.GetById(to.Id, Arg.Any<CancellationToken>()).Returns(to);
+
+        var request = new TransferBetweenAccounts.Request(to.Id, 25);
+
+        // Act
+        await TransferBetweenAccounts.Handler(clientId, from.Id, request, _accountRepository, default);
+
+        // Assert
+        await _accountRepository.Received(1).Update(
+            Arg.Any<CancellationToken>(),
+            Arg.Is<IEnumerable<Account>>(items => items.Any(a => a.Id == from.Id) && items.Any(a => a.Id == to.Id))
+        );
+    }
 }
