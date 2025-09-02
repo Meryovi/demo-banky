@@ -20,7 +20,7 @@ jobs:
         run: dotnet restore --locked-mode ./src/Banky.Server/Banky.Server.csproj
 
       - name: Build
-        run: dotnet publish --no-restore --sc false -o ./app ./src/Banky.Server/Banky.Server.csproj
+        run: dotnet publish --no-restore -r linux-x64 -o ./app ./src/Banky.Server/Banky.Server.csproj
 
       - name: Login to Azure Container Registry
         uses: docker/login-action@v3

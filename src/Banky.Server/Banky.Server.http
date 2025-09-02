@@ -48,7 +48,6 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "sourceAccountId": "{{Banky_AccountId}}",
-  "destinationAccountId": "",
-  "amount": 0
+  "toAccountId": "",
+  "amount": 100
 }

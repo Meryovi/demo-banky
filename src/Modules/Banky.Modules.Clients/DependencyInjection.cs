@@ -8,7 +8,7 @@ public static class DependencyInjection
 {
     public static void AddClientsModule(this IServiceCollection services, IConfiguration configuration)
     {
-        var connection = configuration.GetConnectionString("Accounts");
+        var connection = configuration.GetConnectionString("Clients");
 
         if (!string.IsNullOrEmpty(connection)) // Don't do this in production :)
         {
